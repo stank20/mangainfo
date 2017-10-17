@@ -1,0 +1,40 @@
+machine:
+  timezone: Asia/Tokyo
+  xcode:
+    version: '8.3'
+dependencies:
+  pre:
+    #- brew update
+    #- brew install swiftlint
+    #- sudo gem install fastlane
+  cache_directories:
+    - ~/advent
+  override:
+    - mkdir -p ~/advent
+    - |
+      if [ -e ~/advent/build.log ]; then
+        cat ~/advent/build.log
+      fi
+    - >-
+      echo "`date +'%Y-%m-%d %H:%M:%S'` branch=$CIRCLE_BRANCH
+      build_number=$CIRCLE_BUILD_NUM" >> ~/advent/build.log
+    - |
+      if [ -e ~/advent/build.log ]; then
+        cat ~/advent/build.log
+      fi
+test:
+  override:
+    - echo CIRCLECI TEST!
+  pre:
+    - echo pre
+deployment:
+  except_master:
+    branch: /^((?!master).)*$/
+    commands:
+      #- bundle exec fastlane ios test --verbose
+      #- bundle exec fastlane beta  --verbos
+  master:
+    branch: master
+    commands:
+      #- bundle exec fastlane ios test --verbose
+      #- bundle exec fastlane release --verbos
